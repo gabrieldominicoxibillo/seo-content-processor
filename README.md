@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="favicon.webp" alt="SEO Content Processor Logo" width="64" height="64">
+  <img src="/frontend/images/favicon.webp" alt="SEO Content Processor Logo" width="200" height="200">
 </p>
 
 # SEO Content Processor
@@ -151,4 +151,3 @@ If you have questions about this project or would like to get in touch:
 - **Email**: gabrieldominicoxibillo@gmail.com
 - **Portfolio**: https://gabrieldominicoxibillo.github.io/portfolio/
 
-Feel free to reach out for questions, feedback, or collaboration opportunities.
