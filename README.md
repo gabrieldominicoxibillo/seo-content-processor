@@ -2,9 +2,9 @@
   <img src="/frontend/images/favicon.webp" alt="SEO Content Processor Logo" width="200" height="200">
 </p>
 
-<h1>SEO Content Processor</h1>
+<h1 align="center">SEO Content Processor</h1>
 
-<p>
+<p align="center">
 A simple web application that takes your article title and content and automatically creates SEO-friendly elements like URL slugs, shortened titles, and meta descriptions. This tool helps content creators optimize their articles for search engines.
 </p>
 
