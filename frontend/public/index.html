@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Content Processor</title>
+    <meta name="description"
+        content="Process your article content to generate SEO-friendly slugs, titles, and meta descriptions">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>SEO Content Processor</h1>
+            <p>Transform your articles into SEO-optimized content</p>
+        </header>
+
+        <main>
+            <form id="content-form" class="content-form">
+                <div class="form-group">
+                    <label for="article-title">Article Title</label>
+                    <input type="text" id="article-title" name="title" placeholder="Enter your article title here..."
+                        required maxlength="200">
+                </div>
+
+                <div class="form-group">
+                    <label for="article-content">Article Content</label>
+                    <textarea id="article-content" name="content"
+                        placeholder="Paste or type your article content here..." required rows="10"
+                        minlength="50"></textarea>
+                </div>
+
+                <button type="submit" id="process-btn" class="btn-primary">
+                    Process Content
+                </button>
+            </form>
+
+            <div id="results" class="results-section" style="display: none;">
+                <h2>SEO Results</h2>
+
+                <div class="result-item">
+                    <h3>URL Slug</h3>
+                    <div class="result-content">
+                        <span id="result-slug"></span>
+                    </div>
+                </div>
+
+                <div class="result-item">
+                    <h3>SEO Title (60 chars max)</h3>
+                    <div class="result-content">
+                        <span id="result-seo-title"></span>
+                        <small class="char-count" id="title-char-count"></small>
+                    </div>
+                </div>
+
+                <div class="result-item">
+                    <h3>Meta Description (160 chars max)</h3>
+                    <div class="result-content">
+                        <span id="result-meta-description"></span>
+                        <small class="char-count" id="meta-char-count"></small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loading" class="loading" style="display: none;">
+                <p>Processing your content...</p>
+            </div>
+
+            <div id="error" class="error-message" style="display: none;">
+                <p id="error-text"></p>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 SEO Content Processor</p>
+        </footer>
+    </div>
+</body>
+
+</html>
