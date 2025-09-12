@@ -38,29 +38,68 @@
             </form>
 
             <div id="results" class="results-section" style="display: none;">
-                <h2>SEO Results</h2>
-
-                <div class="result-item">
-                    <h3>URL Slug</h3>
-                    <div class="result-content">
-                        <span id="result-slug"></span>
+                <div class="results-header">
+                    <h2>SEO Results</h2>
+                    <div class="success-indicator" id="success-indicator">
+                        <span class="success-icon">✓</span>
+                        <span class="success-text">Content processed successfully!</span>
                     </div>
                 </div>
 
                 <div class="result-item">
-                    <h3>SEO Title (60 chars max)</h3>
+                    <div class="result-header">
+                        <h3>URL Slug</h3>
+                        <button class="copy-btn" data-copy="slug" title="Copy to clipboard">
+                            <span class="copy-icon">📋</span>
+                            <span class="copy-text">Copy</span>
+                        </button>
+                    </div>
                     <div class="result-content">
-                        <span id="result-seo-title"></span>
+                        <span id="result-slug" class="result-text"></span>
+                    </div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-header">
+                        <h3>SEO Title</h3>
+                        <button class="copy-btn" data-copy="seo-title" title="Copy to clipboard">
+                            <span class="copy-icon">📋</span>
+                            <span class="copy-text">Copy</span>
+                        </button>
+                    </div>
+                    <div class="result-content">
+                        <span id="result-seo-title" class="result-text"></span>
                         <small class="char-count" id="title-char-count"></small>
                     </div>
+                    <div class="result-meta">
+                        <small>Optimized for search engine titles (max 60 characters)</small>
+                    </div>
                 </div>
 
                 <div class="result-item">
-                    <h3>Meta Description (160 chars max)</h3>
+                    <div class="result-header">
+                        <h3>Meta Description</h3>
+                        <button class="copy-btn" data-copy="meta-description" title="Copy to clipboard">
+                            <span class="copy-icon">📋</span>
+                            <span class="copy-text">Copy</span>
+                        </button>
+                    </div>
                     <div class="result-content">
-                        <span id="result-meta-description"></span>
+                        <span id="result-meta-description" class="result-text"></span>
                         <small class="char-count" id="meta-char-count"></small>
                     </div>
+                    <div class="result-meta">
+                        <small>Optimized for search snippets (max 160 characters)</small>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn-secondary" id="copy-all-btn" title="Copy all results as HTML meta tags">
+                        Copy All as HTML
+                    </button>
+                    <button class="btn-secondary" id="process-another-btn">
+                        Process Another Article
+                    </button>
                 </div>
             </div>
 

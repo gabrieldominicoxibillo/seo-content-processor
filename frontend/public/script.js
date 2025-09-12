@@ -120,6 +120,9 @@ class SEOContentProcessor {
         this.hideError();
         this.hideLoading();
 
+        // Store data for copy functionality
+        this.currentResults = data;
+
         // Populate results
         const slugElement = document.getElementById('result-slug');
         const seoTitleElement = document.getElementById('result-seo-title');
@@ -143,17 +146,37 @@ class SEOContentProcessor {
         if (titleCharCount && data.seoTitle) {
             const count = data.seoTitle.length;
             titleCharCount.textContent = `${count}/60 characters`;
-            titleCharCount.style.color = count > 60 ? '#e57373' : '#666666';
+            titleCharCount.className = 'char-count';
+            if (count > 60) {
+                titleCharCount.classList.add('over-limit');
+            } else if (count > 50) {
+                titleCharCount.classList.add('warning');
+            } else {
+                titleCharCount.classList.add('good');
+            }
         }
 
         if (metaCharCount && data.metaDescription) {
             const count = data.metaDescription.length;
             metaCharCount.textContent = `${count}/160 characters`;
-            metaCharCount.style.color = count > 160 ? '#e57373' : '#666666';
+            metaCharCount.className = 'char-count';
+            if (count > 160) {
+                metaCharCount.classList.add('over-limit');
+            } else if (count > 140) {
+                metaCharCount.classList.add('warning');
+            } else {
+                metaCharCount.classList.add('good');
+            }
         }
+
+        // Show success indicator with animation
+        this.showSuccessIndicator();
 
         // Show results section with animation
         this.showResults();
+
+        // Initialize copy functionality
+        this.initializeCopyButtons();
     }
 
     setLoadingState(isLoading) {
@@ -236,33 +259,160 @@ class SEOContentProcessor {
         }
     }
 
-    // Method to add copy functionality to results
-    addCopyFunctionality() {
-        const resultElements = document.querySelectorAll('.result-content span');
-        
-        resultElements.forEach(element => {
-            // Add click listener for copying
+    // Initialize copy buttons functionality
+    initializeCopyButtons() {
+        // Individual copy buttons
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const copyType = button.getAttribute('data-copy');
+                await this.handleCopyClick(button, copyType);
+            });
+        });
+
+        // Copy all button
+        const copyAllBtn = document.getElementById('copy-all-btn');
+        if (copyAllBtn) {
+            copyAllBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await this.copyAllAsHTML();
+            });
+        }
+
+        // Process another button
+        const processAnotherBtn = document.getElementById('process-another-btn');
+        if (processAnotherBtn) {
+            processAnotherBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.resetForNewProcess();
+            });
+        }
+
+        // Make result text clickable for copying
+        const resultTexts = document.querySelectorAll('.result-text');
+        resultTexts.forEach(element => {
+            element.style.cursor = 'pointer';
+            element.title = 'Click to copy';
             element.addEventListener('click', async () => {
                 const text = element.textContent;
                 const success = await this.copyToClipboard(text);
-                
                 if (success) {
-                    // Show temporary feedback
-                    const originalText = element.textContent;
-                    element.textContent = 'Copied!';
-                    element.style.color = '#7cb342';
-                    
-                    setTimeout(() => {
-                        element.textContent = originalText;
-                        element.style.color = '';
-                    }, 1000);
+                    this.showCopyFeedback(element);
                 }
             });
-            
-            // Add hover effect
-            element.style.cursor = 'pointer';
-            element.title = 'Click to copy';
         });
+    }
+
+    // Handle individual copy button clicks
+    async handleCopyClick(button, copyType) {
+        let textToCopy = '';
+        
+        switch (copyType) {
+            case 'slug':
+                textToCopy = this.currentResults?.slug || '';
+                break;
+            case 'seo-title':
+                textToCopy = this.currentResults?.seoTitle || '';
+                break;
+            case 'meta-description':
+                textToCopy = this.currentResults?.metaDescription || '';
+                break;
+        }
+
+        if (textToCopy) {
+            const success = await this.copyToClipboard(textToCopy);
+            if (success) {
+                this.showButtonCopyFeedback(button);
+            }
+        }
+    }
+
+    // Copy all results as HTML meta tags
+    async copyAllAsHTML() {
+        if (!this.currentResults) return;
+
+        const htmlOutput = `<!-- SEO Meta Tags -->
+<title>${this.currentResults.seoTitle || ''}</title>
+<meta name="description" content="${this.currentResults.metaDescription || ''}">
+<meta property="og:title" content="${this.currentResults.seoTitle || ''}">
+<meta property="og:description" content="${this.currentResults.metaDescription || ''}">
+<meta name="twitter:title" content="${this.currentResults.seoTitle || ''}">
+<meta name="twitter:description" content="${this.currentResults.metaDescription || ''}">
+
+<!-- URL Slug: ${this.currentResults.slug || ''} -->`;
+
+        const success = await this.copyToClipboard(htmlOutput);
+        if (success) {
+            const copyAllBtn = document.getElementById('copy-all-btn');
+            this.showButtonCopyFeedback(copyAllBtn, 'HTML Copied!');
+        }
+    }
+
+    // Show copy feedback for buttons
+    showButtonCopyFeedback(button, customText = 'Copied!') {
+        const originalText = button.innerHTML;
+        button.innerHTML = `<span class="success-icon">✓</span> ${customText}`;
+        button.classList.add('copied');
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }
+
+    // Show copy feedback for text elements
+    showCopyFeedback(element) {
+        const originalText = element.textContent;
+        element.textContent = 'Copied!';
+        element.classList.add('copied-text');
+        
+        setTimeout(() => {
+            element.textContent = originalText;
+            element.classList.remove('copied-text');
+        }, 1500);
+    }
+
+    // Show success indicator with animation
+    showSuccessIndicator() {
+        const indicator = document.getElementById('success-indicator');
+        if (indicator) {
+            indicator.style.display = 'flex';
+            indicator.style.opacity = '0';
+            indicator.style.transform = 'translateY(-10px)';
+            
+            // Animate in
+            setTimeout(() => {
+                indicator.style.transition = 'all 0.3s ease-out';
+                indicator.style.opacity = '1';
+                indicator.style.transform = 'translateY(0)';
+            }, 100);
+        }
+    }
+
+    // Hide success indicator
+    hideSuccessIndicator() {
+        const indicator = document.getElementById('success-indicator');
+        if (indicator) {
+            indicator.style.display = 'none';
+        }
+    }
+
+    // Reset for new process
+    resetForNewProcess() {
+        this.hideResults();
+        this.hideError();
+        this.hideSuccessIndicator();
+        this.currentResults = null;
+        
+        // Scroll to form
+        this.form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Focus on title input
+        const titleInput = document.getElementById('article-title');
+        if (titleInput) {
+            setTimeout(() => titleInput.focus(), 500);
+        }
     }
 
     // Method to clear form
@@ -270,6 +420,7 @@ class SEOContentProcessor {
         this.form.reset();
         this.hideResults();
         this.hideError();
+        this.hideSuccessIndicator();
     }
 
     // Method to handle keyboard shortcuts
@@ -293,13 +444,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add keyboard shortcuts
     document.addEventListener('keydown', processor.handleKeyboardShortcuts.bind(processor));
-    
-    // Add copy functionality after results are displayed
-    const originalDisplayResults = processor.displayResults.bind(processor);
-    processor.displayResults = function(data) {
-        originalDisplayResults(data);
-        setTimeout(() => this.addCopyFunctionality(), 100);
-    };
 });
 
 // Export for potential module usage
