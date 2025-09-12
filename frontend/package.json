@@ -1,0 +1,17 @@
+{
+  "name": "seo-content-processor-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for SEO Content Processor",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=8080",
+    "build": "echo 'No build step required for vanilla frontend'",
+    "deploy": "wrangler pages publish public"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "keywords": ["seo", "frontend", "vanilla-js"],
+  "author": "",
+  "license": "MIT"
+}
