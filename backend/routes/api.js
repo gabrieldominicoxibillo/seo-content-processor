@@ -1,6 +1,7 @@
 // API Routes for SEO Content Processor
 const express = require('express');
 const { validateProcessRequest, rateLimit, sanitizeInput } = require('../middleware/validation');
+const seoProcessor = require('../utils/seo');
 
 const router = express.Router();
 
@@ -11,6 +12,7 @@ router.use(rateLimit);
 router.post('/process', sanitizeInput, validateProcessRequest, async (req, res) => {
     try {
         const { title, content } = req.body;
+        const startTime = Date.now();
         
         console.log('Processing request:', {
             titleLength: title.length,
@@ -18,25 +20,35 @@ router.post('/process', sanitizeInput, validateProcessRequest, async (req, res) 
             timestamp: new Date().toISOString()
         });
 
-        // For now, return a basic response structure
-        // This will be enhanced with actual SEO processing logic in Step 7
+        // Use enhanced SEO processing
+        const seoData = seoProcessor.processSEOData(title, content);
+        const processingTime = Date.now() - startTime;
+
         const response = {
             success: true,
             data: {
-                slug: generateBasicSlug(title),
-                seoTitle: truncateTitle(title),
-                metaDescription: generateBasicMetaDescription(content),
-                originalTitle: title,
-                originalContentLength: content.length
+                slug: seoData.slug,
+                seoTitle: seoData.seoTitle,
+                metaDescription: seoData.metaDescription,
+                originalTitle: seoData.originalTitle,
+                originalContentLength: seoData.originalContentLength,
+                seoScores: seoData.seoScores,
+                recommendations: seoData.recommendations
             },
-            processedAt: new Date().toISOString()
+            meta: {
+                processingTimeMs: processingTime,
+                processedAt: new Date().toISOString(),
+                version: '1.0.0'
+            }
         };
 
-        // Log successful processing
+        // Log successful processing with enhanced details
         console.log('Processing completed successfully:', {
             slug: response.data.slug,
             titleLength: response.data.seoTitle.length,
-            descriptionLength: response.data.metaDescription.length
+            descriptionLength: response.data.metaDescription.length,
+            overallScore: response.data.seoScores.overall,
+            processingTime: processingTime + 'ms'
         });
 
         res.status(200).json(response);
@@ -65,54 +77,5 @@ router.get('/status', (req, res) => {
     });
 });
 
-// Basic helper functions (these will be enhanced in Step 7)
-function generateBasicSlug(title) {
-    return title
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
-        .replace(/\s+/g, '-') // Replace spaces with hyphens
-        .replace(/-+/g, '-') // Replace multiple hyphens with single
-        .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
-}
-
-function truncateTitle(title) {
-    const maxLength = 60;
-    if (title.length <= maxLength) {
-        return title;
-    }
-    
-    // Truncate at word boundary
-    const truncated = title.substring(0, maxLength);
-    const lastSpace = truncated.lastIndexOf(' ');
-    
-    if (lastSpace > 0) {
-        return truncated.substring(0, lastSpace) + '...';
-    }
-    
-    return truncated + '...';
-}
-
-function generateBasicMetaDescription(content) {
-    const maxLength = 160;
-    
-    // Clean up the content
-    const cleanContent = content
-        .replace(/\s+/g, ' ') // Normalize whitespace
-        .trim();
-    
-    if (cleanContent.length <= maxLength) {
-        return cleanContent;
-    }
-    
-    // Truncate at word boundary
-    const truncated = cleanContent.substring(0, maxLength);
-    const lastSpace = truncated.lastIndexOf(' ');
-    
-    if (lastSpace > 0) {
-        return truncated.substring(0, lastSpace) + '...';
-    }
-    
-    return truncated + '...';
-}
 
 module.exports = router;
