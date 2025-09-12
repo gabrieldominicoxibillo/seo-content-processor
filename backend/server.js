@@ -23,14 +23,48 @@ app.use(helmet({
     },
 }));
 
-// CORS Configuration
+// Enhanced CORS Configuration
 const corsOptions = {
-    origin: NODE_ENV === 'production'
-        ? ['https://your-domain.com'] // Replace with your production domain
-        : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    origin: function (origin, callback) {
+        const allowedOrigins = NODE_ENV === 'production' 
+            ? [
+                'https://your-domain.com',
+                'https://www.your-domain.com'
+              ] // Replace with your production domain(s)
+            : [
+                'http://localhost:3000',
+                'http://127.0.0.1:3000',
+                'http://localhost:5500',
+                'http://127.0.0.1:5500',
+                'http://localhost:8080',
+                'http://127.0.0.1:8080'
+              ];
+        
+        // Allow requests with no origin (mobile apps, postman, etc.)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.warn(`CORS blocked request from origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+        'Content-Type', 
+        'Authorization', 
+        'X-Requested-With',
+        'Accept',
+        'Origin'
+    ],
+    exposedHeaders: [
+        'X-Total-Count',
+        'X-Processing-Time',
+        'X-API-Version'
+    ],
+    credentials: true,
+    maxAge: 86400 // Cache preflight for 24 hours
 };
 
 app.use(cors(corsOptions));
@@ -39,8 +73,62 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Static Files Middleware - Serve frontend files
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+// Enhanced Static Files Middleware - Serve frontend files with caching
+const staticOptions = {
+    // Enable caching for production
+    maxAge: NODE_ENV === 'production' ? '1d' : '0',
+    // Enable gzip compression
+    setHeaders: (res, path, stat) => {
+        // Set caching headers based on file type
+        if (path.endsWith('.html')) {
+            // Don't cache HTML files to ensure updates are seen immediately
+            res.set('Cache-Control', 'no-cache');
+        } else if (path.endsWith('.css') || path.endsWith('.js')) {
+            // Cache CSS and JS files for longer
+            res.set('Cache-Control', 'public, max-age=86400'); // 1 day
+        } else if (path.endsWith('.png') || path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.gif') || path.endsWith('.svg')) {
+            // Cache images for longer
+            res.set('Cache-Control', 'public, max-age=604800'); // 1 week
+        }
+        
+        // Add security headers
+        res.set('X-Content-Type-Options', 'nosniff');
+        res.set('X-Frame-Options', 'DENY');
+        
+        // Add API version header
+        res.set('X-API-Version', '1.0.0');
+    }
+};
+
+app.use(express.static(path.join(__dirname, '../frontend/public'), staticOptions));
+
+// API Response Headers Middleware
+app.use('/api', (req, res, next) => {
+    // Add standard API headers
+    res.set('X-API-Version', '1.0.0');
+    res.set('X-Powered-By', 'SEO Content Processor');
+    
+    // Add processing time tracking
+    req.startTime = Date.now();
+    
+    // Override res.json to add processing time
+    const originalJson = res.json;
+    res.json = function(obj) {
+        if (req.startTime) {
+            res.set('X-Processing-Time', `${Date.now() - req.startTime}ms`);
+        }
+        
+        // Add timestamp to all API responses
+        if (obj && typeof obj === 'object' && !obj.meta) {
+            obj.meta = obj.meta || {};
+            obj.meta.timestamp = new Date().toISOString();
+        }
+        
+        return originalJson.call(this, obj);
+    };
+    
+    next();
+});
 
 // Request Logging Middleware (Development)
 if (NODE_ENV === 'development') {
