@@ -60,12 +60,9 @@ app.get('/health', (req, res) => {
     });
 });
 
-// API Routes Placeholder
-app.use('/api', (req, res, next) => {
-    // This will be replaced with actual API routes in the next step
-    console.log('API route accessed:', req.path);
-    next();
-});
+// API Routes
+const apiRoutes = require('./routes/api');
+app.use('/api', apiRoutes);
 
 // Catch-all handler for SPA (Single Page Application)
 app.get('*', (req, res) => {
