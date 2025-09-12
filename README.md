@@ -151,5 +151,5 @@ The entire application runs locally on your computer and does not require an int
 If you have questions about this project or would like to get in touch:
 
 - **Email**: gabrieldominicoxibillo@gmail.com
-- **Portfolio**: https://gabrieldominicoxibillo.github.io/portfolio/
+- **LinkedIn**: https://www.linkedin.com/in/gabrieldominicoxibillo/
 
