@@ -89,6 +89,7 @@ You will now see the SEO Content Processor interface.
 
 Here is an example of what the application generates:
 
+![Quick Start](/frontend/images/quick-start.webp)
 ![Sample SEO Results](/frontend/images/results-example1.webp)
 ![Sample SEO Results](/frontend/images/results-example2.webp)
 
