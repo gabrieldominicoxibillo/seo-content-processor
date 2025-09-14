@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const titleInput = document.getElementById('title');
     const contentInput = document.getElementById('content');
     
+    // Reset Button
+    const resetBtn = document.getElementById('resetBtn');
+    
     // Example data
     const exampleTitle = "How to Build a Scalable Full-Stack Application Using Modern Web Technologies in 2025 for Better Performance and Reliability";
     const exampleContent = "Building scalable web applications is crucial for handling growing traffic. This guide explores architecture patterns, database optimization techniques, caching strategies, containerization using Docker, and CI/CD workflows to ensure your applications remain fast and reliable even as user demand increases across multiple regions and devices.";
@@ -25,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     pasteBtn.addEventListener('click', pasteExample);
+    resetBtn.addEventListener('click', resetForm);
     
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
@@ -58,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
             titleInput.style.borderColor = '';
             contentInput.style.borderColor = '';
         }, 1000);
+    }
+    
+    function resetForm() {
+        window.location.href = '/';
     }
     
     form.addEventListener('submit', async function(e) {
