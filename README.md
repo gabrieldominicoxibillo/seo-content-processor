@@ -79,7 +79,7 @@ You will now see the SEO Content Processor interface.
 
 1. **Enter Your Article Title**: Type your article title in the first text box
 2. **Add Your Content**: Paste or type your article content in the large text area
-3. **Click Generate SEO**: Press the blue "Generate SEO" button
+3. **Click Process Content**: Press the blue "Process Content" button
 4. **View Results**: The application will show you three results:
    - The URL-friendly slug
    - Your optimized SEO title
