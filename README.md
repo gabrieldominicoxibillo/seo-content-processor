@@ -90,8 +90,8 @@ You will now see the SEO Content Processor interface.
 Here is an example of what the application generates:
 
 ![Quick Start](/frontend/images/quick-start.webp)
-![Sample SEO Results](/frontend/images/results-example1.webp)
 ![Sample SEO Results](/frontend/images/results-example2.webp)
+![Sample SEO Results](/frontend/images/results-example3.webp)
 
 The image above shows how the application processes a sample article about "How to Build a Scalable Full-Stack Application" and generates clean, SEO-optimized metadata that you can use for your website or blog.
 
