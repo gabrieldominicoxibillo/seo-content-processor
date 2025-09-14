@@ -10,6 +10,32 @@
 </head>
 
 <body>
+    <!-- Quick Start Button -->
+    <div class="quick-start" id="quickStartBtn">
+        Quick Start ❓
+    </div>
+
+    <!-- Quick Start Popup -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>Quick Start Example</h3>
+                <button class="close-btn" id="closeBtn">&times;</button>
+            </div>
+            <div class="popup-body">
+                <div class="example-section">
+                    <h4>Example Title:</h4>
+                    <p class="example-title">How to Build a Scalable Full-Stack Application Using Modern Web Technologies in 2025 for Better Performance and Reliability</p>
+                </div>
+                <div class="example-section">
+                    <h4>Example Content:</h4>
+                    <p class="example-content">Building scalable web applications is crucial for handling growing traffic. This guide explores architecture patterns, database optimization techniques, caching strategies, containerization using Docker, and CI/CD workflows to ensure your applications remain fast and reliable even as user demand increases across multiple regions and devices.</p>
+                </div>
+                <button class="paste-btn" id="pasteBtn">Paste Texts</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="logo">
             <div class="logo-icon">
@@ -31,7 +57,15 @@
                     required></textarea>
             </div>
 
-            <button type="submit" class="btn">Process Content</button>
+            <div class="button-group">
+                <button type="submit" class="btn">Process Content</button>
+                <button type="button" class="reset-btn" id="resetBtn" title="Reset Form">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
+                </button>
+            </div>
         </form>
 
         <div id="results" class="results hidden">

@@ -122,7 +122,7 @@ textarea {
     background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
     font-size: 16px;
-    transition: all 0.3s ease;
+
 }
 
 input:focus,
@@ -269,6 +269,193 @@ button:disabled {
     margin-top: 16px;
 }
 
+/* Quick Start Button */
+.quick-start {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #00ff88, #00ccff);
+    color: #0a0a0f;
+    padding: 12px 16px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    user-select: none;
+    box-shadow:
+        0 4px 15px rgba(0, 255, 136, 0.3),
+        0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.quick-start:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow:
+        0 8px 25px rgba(0, 255, 136, 0.4),
+        0 0 30px rgba(0, 255, 136, 0.3);
+}
+
+/* Popup Overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+/* Popup Content */
+.popup-content {
+    background: rgba(15, 15, 25, 0.95);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 16px;
+    padding: 0;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow:
+        0 0 50px rgba(0, 255, 136, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: popupSlideIn 0.3s ease;
+}
+
+@keyframes popupSlideIn {
+    from {
+        transform: scale(0.8) translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Popup Header */
+.popup-header {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-header h3 {
+    color: #00ff88;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #8892b0;
+    font-size: 24px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+/* Popup Body */
+.popup-body {
+    padding: 24px;
+}
+
+.example-section {
+    margin-bottom: 24px;
+}
+
+.example-section h4 {
+    color: #00ff88;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.example-title,
+.example-content {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 16px;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.example-title {
+    font-weight: 600;
+}
+
+.paste-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #00ff88, #00ccff);
+    color: #0a0a0f;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.paste-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.paste-btn:hover::before {
+    left: 100%;
+}
+
+.paste-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 30px rgba(0, 255, 136, 0.4),
+        0 0 40px rgba(0, 255, 136, 0.2);
+}
+
 @media (max-width: 480px) {
     .container {
         padding: 24px;
@@ -277,5 +464,21 @@ button:disabled {
 
     .logo h1 {
         font-size: 24px;
+    }
+
+    .quick-start {
+        top: 10px;
+        left: 10px;
+        padding: 10px 14px;
+        font-size: 12px;
+    }
+
+    .popup-content {
+        width: 95%;
+        margin: 10px;
+    }
+
+    .popup-body {
+        padding: 16px;
     }
 }
