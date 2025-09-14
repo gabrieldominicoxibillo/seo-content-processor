@@ -97,6 +97,22 @@ label {
     letter-spacing: 0.5px;
 }
 
+
+textarea::-webkit-scrollbar {
+    width: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00ff88, #00ccff);
+    border-radius: 8px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #00ccff, #00ff88);
+}
+
 input,
 textarea {
     width: 100%;
